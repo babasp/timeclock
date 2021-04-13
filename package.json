@@ -20,7 +20,13 @@
   "homepage": "https://github.com/babasp/timeclock#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "morgan": "^1.10.0",
     "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.7"
+  },
+  "engines": {
+    "node": ">=14.15.0"
   }
 }
