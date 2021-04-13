@@ -4,4 +4,4 @@
 2. Run "npm install" command
 3. Run "npm start" command
 
-go to [localhost:5000](http://localhost:5000)
+go to <a href="http://localhost:5000" target="_blank">localhost:5000</a>
