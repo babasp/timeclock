@@ -1,0 +1,57 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+/* =============
+Employee page style
+==============
+*/
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.button {
+  border: none;
+  outline: none;
+  padding: 10px;
+  transition: 0.2s ease-out;
+}
+.bg-button {
+  flex: 50% 0 0;
+  padding: 30px 0;
+  text-align: center;
+  color: aliceblue;
+  font-size: 200%;
+}
+.button-start-shift {
+  background-color: #2ed573;
+}
+.button-start-shift:hover {
+  background-color: #00c050;
+}
+.button-end-shift {
+  background-color: #1e90ff;
+}
+.button-end-shift:hover {
+  background-color: #047ef8;
+}
+.button-start-break {
+  background-color: #3742fa;
+}
+
+.button-start-break:hover {
+  background-color: #2933f3;
+}
+.button-end-break {
+  background-color: #2f3542;
+}
+.button-end-break:hover {
+  background-color: #242e44;
+}
+footer {
+  padding: 4rem 0;
+  background-color: #f8c291;
+  margin-top: 4rem;
+}
