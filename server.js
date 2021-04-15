@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const employeeRoutes = require("./routes/employeeRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const errorController = require("./controllers/errorController");
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
@@ -28,6 +29,8 @@ app.use("/admin", adminRoutes);
 app.all("*", (req, res) => {
   res.render("404");
 });
+
+app.use(errorController);
 
 //connect mongoDB
 const DB = process.env.MONGO_URI.replace(
