@@ -1,6 +1,14 @@
 const { promisify } = require("util");
 const Admin = require("../models/Admin");
+const Employee = require("../models/Employee");
+const Site = require("../models/Site");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
+
+const checkAndFormatDate = time => {
+  return time ? moment(new Date(time)).format("lll") : "-";
+};
+
 const signToken = id =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -87,10 +95,61 @@ exports.updateAdmin = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+exports.addSite = async (req, res) => {
+  try {
+    const site = await Site.create(req.body);
+    res.json({ success: true, data: site });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+exports.deleteSite = async (req, res) => {
+  try {
+    const site = await Site.findByIdAndDelete(req.params.siteId);
+    res.json({ success: true, data: "site deleted" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+exports.deleteEmployee = async (req, res) => {
+  try {
+    const employee = await Employee.findByIdAndDelete(req.params.employeeId);
+    res.json({ success: true, data: "employee deleted" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 /// views
-exports.viewAdminPage = (req, res) => {
-  return res.render("admin");
+exports.viewAdminPage = async (req, res) => {
+  try {
+    let employees = await Employee.find();
+    employees = employees.map(employee => ({
+      ...employee.toObject(),
+      clockInTime: checkAndFormatDate(employee.clockInTime),
+      clockOutTime: checkAndFormatDate(employee.clockOutTime),
+      breakStartTime: checkAndFormatDate(employee.breakStartTime),
+      breakEndTime: checkAndFormatDate(employee.breakEndTime),
+      location: Object.values(employee.location.toObject()).join(", "),
+    }));
+    return res.render("admin/admin", { employees });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/admin");
+  }
 };
 exports.viewProfilePage = (req, res) => {
-  res.render("profile", { admin: req.admin });
+  res.render("admin/profile", { admin: req.admin });
+};
+exports.viewAllSitePage = async (req, res) => {
+  try {
+    const allSites = await Site.find();
+
+    res.render("admin/allSite", { sites: allSites });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/admin");
+  }
+};
+exports.viewAddSitePage = (req, res) => {
+  res.render("admin/addSite", { admin: req.admin });
 };

@@ -1,0 +1,79 @@
+<%- include("_adminHeader") %>
+
+  <div class="container">
+    <div class="row d-flex justify-content-center my-3">
+      <div class="col-md-6">
+        <h3 class="display-6">Add Site</h3>
+      </div>
+
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <form>
+          <div class="form-group mb-3">
+            <label for="siteName">Site Name</label>
+            <input class="form-control" id="siteName" type="text" name="siteName" placeholder="Site Name" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="siteLink">Site Link</label>
+            <input class="form-control" id="siteLink" type="text" name="siteLink" placeholder="Site Link" />
+          </div>
+
+          <div class="d-grid gap-2 mt-3">
+            <input type="submit" id="createBtn" value="Create" class="btn btn-block btn-primary">
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    const form = document.querySelector("form")
+    const siteNameInput = document.getElementById('siteName')
+    const siteLinkInput = document.getElementById('siteLink')
+    const createBtn = document.getElementById('createBtn');
+    const formSubmitHandler = (e) => {
+      e.preventDefault()
+      if (!siteNameInput.value.trim()) {
+        return alert("site name is required")
+      } else if (!siteLinkInput.value.trim()) {
+        return alert('site link is required')
+      }
+      const body = {
+        siteName: siteNameInput.value,
+        siteLink: siteLinkInput.value
+      }
+      siteLinkInput.value = ""
+      siteNameInput.value = ""
+      createBtn.disabled = true;
+      createBtn.value = "creating..."
+      fetch('/admin/api/add-site', {
+        method: "POST",
+        headers: {
+          'Content-Type': "application/json"
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(body),
+      })
+        .then(res => res.json())
+        .then(res => {
+          createBtn.disabled = false;
+          createBtn.value = "Create"
+          if (res.success) {
+            alert("site added successfully")
+          } else {
+            alert(res.messagee)
+          }
+        })
+        .catch(err => {
+          createBtn.disbled = false;
+          createBtn.textContent = "Create";
+          console.log(err)
+        })
+    }
+    form.addEventListener('submit', formSubmitHandler)
+  </script>
+  <%- include("_adminFooter") %>
+    </div>
