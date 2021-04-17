@@ -3,12 +3,6 @@ const Admin = require("../models/Admin");
 const Employee = require("../models/Employee");
 const Site = require("../models/Site");
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
-
-const checkAndFormatDate = time => {
-  return time ? moment(new Date(time)).format("lll") : "-";
-};
-
 const signToken = id =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -135,17 +129,23 @@ exports.deleteEmployee = async (req, res) => {
 };
 /// views
 exports.viewAdminPage = async (req, res) => {
+  const { site, start, end } = req.query;
+
   try {
-    let employees = await Employee.find();
-    employees = employees.map(employee => ({
-      ...employee.toObject(),
-      clockInTime: checkAndFormatDate(employee.clockInTime),
-      clockOutTime: checkAndFormatDate(employee.clockOutTime),
-      breakStartTime: checkAndFormatDate(employee.breakStartTime),
-      breakEndTime: checkAndFormatDate(employee.breakEndTime),
-      location: Object.values(employee.location.toObject()).join(", "),
-    }));
-    return res.render("admin/admin", { employees });
+    let query = Employee.find();
+    if (site) {
+      query = query.find({ siteName: site });
+    } else if (start && end) {
+      query = query.find({
+        clockInTime: { $gte: new Date(start) },
+        clockOutTime: { $lte: new Date(end) },
+      });
+    }
+    let sites = await Site.find();
+    sites = sites.map(s => ({ ...s.toJSON(), isSelect: s.siteName === site }));
+    let employees = await query;
+    employees = Employee.formateDateAndTime(employees);
+    return res.render("admin/admin", { employees, sites });
   } catch (error) {
     console.log(error);
     res.redirect("/admin");

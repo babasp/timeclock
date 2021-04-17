@@ -10,17 +10,13 @@ ADMIN
 */
 //DATE RANGE SELEC
 const dateSelected = (start, end, label) => {
-  console.log(
-    "A new date selection was made: " +
-      start.format("YYYY-MM-DD") +
-      " to " +
-      end.format("YYYY-MM-DD")
-  );
+  console.log(location.pathname);
+  location.assign(`${location.pathname}?start=${start._d}&end=${end._d}`);
 };
 
 $('input[name="daterange"]').daterangepicker(
   {
-    opens: "left",
+    opens: "center",
   },
   dateSelected
 );
@@ -32,6 +28,7 @@ const newPass = document.getElementById("newPass");
 const confirmPassword = document.getElementById("confirmPassword");
 const profileForm = document.getElementById("profileForm");
 const updateBtn = document.getElementById("updateBtn");
+const siteOpt = document.getElementById("siteOptions");
 
 const profileUpdateHandler = e => {
   e.preventDefault();
@@ -82,4 +79,12 @@ const profileUpdateHandler = e => {
 
 if (profileForm) {
   profileForm.addEventListener("submit", profileUpdateHandler);
+}
+
+const siteChangeHandler = e => {
+  location.assign(e.target.value);
+};
+
+if (siteOpt) {
+  siteOpt.addEventListener("change", siteChangeHandler);
 }

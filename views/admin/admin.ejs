@@ -6,11 +6,19 @@
       <input type="text" name="daterange">
     </p>
     <p class="lead text-center">
-      Narrow down by site <select>
-        <option selected>Choose</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+      Narrow down by site <select id="siteOptions">
+        <option value="/admin">All</option>
+        <% sites.forEach(site=>{ %>
+          <% if(site.isSelect){ %>
+            <option selected value="/admin?site=<%= site.siteName %> ">
+              <%= site.siteName %>
+            </option>
+            <% }else{ %>
+              <option value="/admin?site=<%= site.siteName %> ">
+                <%= site.siteName %>
+              </option>
+              <% } %>
+                <% }) %>
       </select>
     </p>
     <p class="text-center">
@@ -18,7 +26,7 @@
     </p>
     <a href="/admin/add-employee" class="btn btn-primary">Add Employee</a>
     <% if(employees.length>0){ %>
-      <table class="table table-striped">
+      <table class="table table-striped" id="employeeTable">
         <thead>
           <tr class="text-center">
             <th scope="col">Site name</th>
@@ -29,11 +37,13 @@
             <th scope="col">Shift End</th>
             <th scope="col">Shift Break Start</th>
             <th scope="col">Shift Break End</th>
+            <th scope="col">Total Time</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
+
           <% for(let employee of employees){ %>
             <tr class="text-center">
               <td>
@@ -60,6 +70,10 @@
               <td>
                 <%= employee.breakEndTime %>
               </td>
+              <td>
+                <%= employee.totalTime %>
+              </td>
+
               <td>
 
               <td><button data-delete-id="<%= employee._id %> "

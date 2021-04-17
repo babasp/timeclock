@@ -54,7 +54,7 @@ const bgButtonClickHandler = name => {
 };
 const revealPosition = pos => {
   const crd = pos.coords;
-  console.log(crd);
+  // console.log(crd);
   const body = {
     name: nameInput.value,
     [actionType]: Date.now(),
@@ -68,26 +68,21 @@ const revealPosition = pos => {
   };
   confirmBtn.textContent = "wait...";
   confirmBtn.disabled = true;
-  nameInput.value = "";
-  siteNameInput.value = "";
-  PIN.value = "";
-  siteLinkInput.value = "";
-  let apiUrl = "/api/employee/create";
-  let method = "POST";
-  hasLocalStorageEmployee = sessionStorage.getItem("employee");
-  if (actionType !== "clockInTime" || hasLocalStorageEmployee) {
-    if (hasLocalStorageEmployee) {
-      hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
-      apiUrl = `/api/employee/update/${hasLocalStorageEmployee._id}`;
-      method = "PATCH";
-    } else {
-      confirmBtn.textContent = "Confirm";
-      confirmBtn.disabled = true;
-      return alert("You have start shift fist");
-    }
-  }
-  fetch(apiUrl, {
-    method: method,
+
+  // hasLocalStorageEmployee = sessionStorage.getItem("employee");
+  // if (actionType !== "clockInTime" || hasLocalStorageEmployee) {
+  //   if (hasLocalStorageEmployee) {
+  //     hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
+  //     apiUrl = `/api/employee/update/${hasLocalStorageEmployee._id}`;
+  //     method = "PATCH";
+  //   } else {
+  //     confirmBtn.textContent = "Confirm";
+  //     confirmBtn.disabled = true;
+  //     return alert("You have start shift fist");
+  //   }
+  // }
+  fetch("/api/employee/update", {
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
@@ -96,10 +91,19 @@ const revealPosition = pos => {
     .then(res => res.json())
     .then(res => {
       confirmBtn.textContent = "Confirm";
-      confirmBtn.disabled = true;
-      sessionStorage.setItem("employee", JSON.stringify(res.data));
-      checkAndUpdateEmployee(res.data);
-      closeBtn.click();
+      confirmBtn.disabled = false;
+      if (res.success) {
+        confirmBtn.disabled = true;
+        nameInput.value = "";
+        siteNameInput.value = "";
+        PIN.value = "";
+        siteLinkInput.value = "";
+        sessionStorage.setItem("employee", JSON.stringify(res.data));
+        checkAndUpdateEmployee(res.data);
+        closeBtn.click();
+      } else {
+        alert(res.message);
+      }
     })
     .catch(err => {
       closeBtn.click();
