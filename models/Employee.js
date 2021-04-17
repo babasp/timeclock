@@ -11,6 +11,9 @@ const employeeSchema = new mongoose.Schema(
     siteName: {
       type: String,
     },
+    siteLink: {
+      type: String,
+    },
     location: {
       lat: Number,
       lng: Number,

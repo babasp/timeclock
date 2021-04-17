@@ -16,12 +16,14 @@
     <p class="text-center">
       <button class="btn btn-primary btn-lg ">Pull Shift</button>
     </p>
+    <a href="/admin/add-employee" class="btn btn-primary">Add Employee</a>
     <% if(employees.length>0){ %>
       <table class="table table-striped">
         <thead>
-          <tr>
+          <tr class="text-center">
             <th scope="col">Site name</th>
             <th scope="col">Employee name </th>
+            <th scope="col">Employee PIN </th>
             <th scope="col">Location</th>
             <th scope="col">Shift Start</th>
             <th scope="col">Shift End</th>
@@ -39,6 +41,9 @@
               </td>
               <td>
                 <%= employee.name %>
+              </td>
+              <td>
+                <%= employee.pin %>
               </td>
               <td>
                 <%= employee.location %>

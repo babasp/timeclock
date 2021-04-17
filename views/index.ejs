@@ -18,12 +18,12 @@
 
 <body>
   <div class="container">
-    <div class="row">
+
+    <div class="row d-none site-heading">
       <div class="col">
         <h3 class="mt-5 mb-5 text-center display-5">Site: San Jose Site</h3>
       </div>
     </div>
-
     <div class="button-container">
       <button onclick="bgButtonClickHandler('clockInTime');" class="button bg-button button-start-shift"
         data-bs-toggle="modal" data-bs-target="#exampleModal">Start
@@ -127,15 +127,21 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Enter your PIN and Name</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Enter your information</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
-            <input type="text" id="nameInput" class="form-control" placeholder="Name" aria-label="name">
+            <input type="text" id="nameInput" class="form-control" placeholder="Your Name" aria-label="your name">
           </div>
           <div class="input-group mb-3">
-            <input type="text" id="pinInput" class="form-control" placeholder="PIN" aria-label="PIN">
+            <input type="text" id="PIN" class="form-control" placeholder="Your PIN" aria-label="pin">
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" id="siteLinkInput" class="form-control" placeholder="Site Link" aria-label="siteLink">
+          </div>
+          <div class="input-group mb-3">
+            <input type="text" id="siteNameInput" class="form-control" placeholder="Site Name" aria-label="site name">
           </div>
         </div>
         <div class="modal-footer">

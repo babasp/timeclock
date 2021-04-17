@@ -111,6 +111,20 @@ exports.deleteSite = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+exports.createEmployee = async (req, res) => {
+  try {
+    const hasEmployee = await Employee.findOne({ pin: req.body.pin });
+    if (hasEmployee) {
+      return res
+        .status(400)
+        .json({ success: false, message: "This pin already used" });
+    }
+    const employee = await Employee.create(req.body);
+    res.json({ success: true, data: employee });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 exports.deleteEmployee = async (req, res) => {
   try {
     const employee = await Employee.findByIdAndDelete(req.params.employeeId);
@@ -152,4 +166,7 @@ exports.viewAllSitePage = async (req, res) => {
 };
 exports.viewAddSitePage = (req, res) => {
   res.render("admin/addSite", { admin: req.admin });
+};
+exports.viewAddEmployeePage = (req, res) => {
+  res.render("admin/addEmployee", { admin: req.admin });
 };

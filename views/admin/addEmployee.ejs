@@ -1,0 +1,92 @@
+<%- include("_adminHeader") %>
+
+  <div class="container">
+    <div class="row d-flex justify-content-center my-3">
+      <div class="col-md-6">
+        <h3 class="display-6">Add Employee</h3>
+      </div>
+
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <form id="addEmployeeform">
+          <div class="form-group mb-3">
+            <label for="name">Name</label>
+            <input class="form-control" id="name" type="text" name="name" placeholder="Name" />
+          </div>
+          <div class="form-group mb-3">
+            <label for="PIN">PIN</label>
+            <input class="form-control" id="pin" type="text" name="pin" placeholder="PIN" />
+            <button type="button" class="btn btn-sm btn-secondary mt-2 pinGenerateBtn">generate pin</button>
+          </div>
+
+          <div class="d-grid gap-2 mt-3">
+            <input type="submit" id="createBtn" value="Create" class="btn btn-block btn-primary">
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    const pinGenerateBtn = document.querySelector(".pinGenerateBtn")
+    const nameInput = document.querySelector("#name")
+    const pinInput = document.querySelector('#pin')
+    const form = document.querySelector('#addEmployeeform')
+    const createBtn = document.querySelector('#createBtn')
+
+    const uuidv4 = () => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    const formSubmitHandler = (e) => {
+      e.preventDefault()
+      const name = nameInput.value.trim();
+      const pin = pinInput.value.trim();
+      if (!name) {
+        return alert("name is required")
+      } else if (!pin) {
+        return alert("pin is required")
+      }
+      body = JSON.stringify({
+        name,
+        pin,
+      })
+      createBtn.disabled = true;
+      createBtn.value = "creating..."
+      fetch('/admin/api/create-employee', {
+        method: "POST",
+        headers: {
+          'Content-Type': "application/json"
+        },
+        credentials: "same-origin",
+        body,
+      })
+        .then(res => res.json())
+        .then(res => {
+          createBtn.disabled = false;
+          createBtn.value = "Create"
+          if (res.success) {
+            nameInput.value = ""
+            pinInput.value = ""
+            alert('employee added successfully')
+          } else {
+            alert(res.message)
+          }
+        })
+        .catch(err => {
+          createBtn.disabled = false;
+          createBtn.value = "Create"
+          console.log(err)
+
+        })
+    }
+    pinGenerateBtn.addEventListener('click', () => pinInput.value = uuidv4())
+    form.addEventListener('submit', formSubmitHandler)
+  </script>
+  <%- include("_adminFooter") %>
+    </div>

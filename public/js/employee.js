@@ -6,9 +6,12 @@ EMPLOYEE
 */
 const confirmBtn = document.getElementById("confirmBtn");
 const closeBtn = document.querySelector("[data-bs-dismiss]");
-const pinInput = document.getElementById("pinInput");
+const siteNameInput = document.getElementById("siteNameInput");
+const siteLinkInput = document.getElementById("siteLinkInput");
 const nameInput = document.getElementById("nameInput");
+const PIN = document.getElementById("PIN");
 const table = document.querySelector(".table");
+const siteHeading = document.querySelector(".site-heading");
 
 let hasLocalStorageEmployee = sessionStorage.getItem("employee");
 
@@ -16,7 +19,11 @@ const formateDateAndTime = time => {
   return time ? moment(time).format("MM-DD-YYYY HH:mm A") : "-";
 };
 const checkAndUpdateEmployee = data => {
+  table.classList.remove("d-none");
+  siteHeading.classList.remove("d-none");
+  siteHeading.querySelector("div h3").textContent = "Site: " + data.siteName;
   const tbody = table.querySelector("tbody");
+
   tbody.innerHTML = `<tr>
         <td>${data.name}</td>
         <td>${data.pin}</td>
@@ -28,7 +35,7 @@ const checkAndUpdateEmployee = data => {
 };
 if (hasLocalStorageEmployee) {
   hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
-  table.classList.remove("d-none");
+
   checkAndUpdateEmployee(hasLocalStorageEmployee);
 }
 
@@ -39,16 +46,21 @@ const bgButtonClickHandler = name => {
   if (hasLocalStorageEmployee) {
     hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
     confirmBtn.disabled = false;
-    pinInput.value = hasLocalStorageEmployee.pin;
+    PIN.value = hasLocalStorageEmployee.pin;
     nameInput.value = hasLocalStorageEmployee.name;
+    siteLinkInput.value = hasLocalStorageEmployee.siteLink;
+    siteNameInput.value = hasLocalStorageEmployee.siteName;
   }
 };
 const revealPosition = pos => {
   const crd = pos.coords;
+  console.log(crd);
   const body = {
     name: nameInput.value,
     [actionType]: Date.now(),
-    pin: pinInput.value,
+    pin: PIN.value,
+    siteName: siteNameInput.value,
+    siteLink: siteLinkInput.value,
     location: {
       lat: crd.latitude,
       lng: crd.longitude,
@@ -57,7 +69,9 @@ const revealPosition = pos => {
   confirmBtn.textContent = "wait...";
   confirmBtn.disabled = true;
   nameInput.value = "";
-  pinInput.value = "";
+  siteNameInput.value = "";
+  PIN.value = "";
+  siteLinkInput.value = "";
   let apiUrl = "/api/employee/create";
   let method = "POST";
   hasLocalStorageEmployee = sessionStorage.getItem("employee");
@@ -85,7 +99,6 @@ const revealPosition = pos => {
       confirmBtn.disabled = true;
       sessionStorage.setItem("employee", JSON.stringify(res.data));
       checkAndUpdateEmployee(res.data);
-      console.log(res);
       closeBtn.click();
     })
     .catch(err => {
@@ -109,6 +122,12 @@ const report = state => {
 const confirmButtonHandler = () => {
   if (!nameInput.value.trim()) {
     return alert("name in required");
+  } else if (!PIN.value.trim()) {
+    return alert("PIN is required!");
+  } else if (!siteLinkInput.value.trim()) {
+    return alert("site link is required");
+  } else if (!siteNameInput.value.trim()) {
+    return alert("site name is required");
   }
 
   navigator.permissions.query({ name: "geolocation" }).then(function (result) {
@@ -125,7 +144,7 @@ const confirmButtonHandler = () => {
     };
   });
 };
-const pinInputChangeHandler = e => {
+const siteNameInputChangeHandler = e => {
   if (e.target.value.length > 0) {
     confirmBtn.disabled = false;
   } else {
@@ -133,4 +152,4 @@ const pinInputChangeHandler = e => {
   }
 };
 confirmBtn.addEventListener("click", confirmButtonHandler);
-pinInput.addEventListener("input", pinInputChangeHandler);
+siteNameInput.addEventListener("input", siteNameInputChangeHandler);
