@@ -1,6 +1,5 @@
 const path = require("path");
 const express = require("express");
-const morgan = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
@@ -20,6 +19,7 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 dotenv.config({ path: "./config.env" });
 if (process.env.NODE_ENV === "development") {
+  const morgan = require("morgan");
   app.use(morgan("tiny"));
 }
 
