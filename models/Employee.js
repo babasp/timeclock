@@ -44,7 +44,7 @@ const calculateTotalTime = (shiftStart, shiftEnd) => {
       .format("mm");
     console.log(h);
     // console.log(duration);
-    return `${h} hour and ${mins} minutes`;
+    return `${h} hours and ${mins} minutes`;
   } else {
     return "-";
   }
