@@ -6,18 +6,19 @@ exports.viewIndexPage = (req, res) => {
 
 // api controllers
 exports.update = async (req, res) => {
-  const { siteName, siteLink, pin, name } = req.body;
+  const { siteName, pin, name } = req.body;
   try {
-    const hasSite = await Site.findOne({ siteName, siteLink });
+    const hasSite = await Site.findOne({ siteName });
     if (!hasSite) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid Credentials!" });
     }
-    const employee = await Employee.findOneAndUpdate({ pin, name }, req.body, {
+    delete req.body.pin;
+    const employee = await Employee.findOneAndUpdate({ name }, req.body, {
       new: true,
     });
-    if (!employee) {
+    if (!employee || pin.toLowerCase() !== employee.pin.toLowerCase()) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid Credentials!" });

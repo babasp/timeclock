@@ -15,11 +15,6 @@
             <label for="siteName">Site Name</label>
             <input class="form-control" id="siteName" type="text" name="siteName" placeholder="Site Name" />
           </div>
-          <div class="form-group mb-3">
-            <label for="siteLink">Site Link</label>
-            <input class="form-control" id="siteLink" type="text" name="siteLink" placeholder="Site Link" />
-          </div>
-
           <div class="d-grid gap-2 mt-3">
             <input type="submit" id="createBtn" value="Create" class="btn btn-block btn-primary">
           </div>
@@ -32,20 +27,15 @@
   <script>
     const form = document.querySelector("form")
     const siteNameInput = document.getElementById('siteName')
-    const siteLinkInput = document.getElementById('siteLink')
     const createBtn = document.getElementById('createBtn');
     const formSubmitHandler = (e) => {
       e.preventDefault()
       if (!siteNameInput.value.trim()) {
         return alert("site name is required")
-      } else if (!siteLinkInput.value.trim()) {
-        return alert('site link is required')
       }
       const body = {
         siteName: siteNameInput.value,
-        siteLink: siteLinkInput.value
       }
-      siteLinkInput.value = ""
       siteNameInput.value = ""
       createBtn.disabled = true;
       createBtn.value = "creating..."

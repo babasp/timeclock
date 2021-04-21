@@ -24,9 +24,8 @@
               <tr>
 
                 <th scope="col">Site Name</th>
-                <th scope="col">Site Link</th>
                 <th scope="col"></th>
-                <th scope="col"></th>
+
               </tr>
             </thead>
             <tbody>
@@ -35,10 +34,7 @@
                   <td>
                     <%= sites[i].siteName %>
                   </td>
-                  <td>
-                    <%= sites[i].siteLink %>
-                  </td>
-                  <td><button data-delete-id="<%= sites[i]._id %> "
+                  <td class="text-end"><button data-delete-id="<%= sites[i]._id %> "
                       class="btn btn-danger btn-sm deleteSiteBtn">Delete</button></td>
                 </tr>
             </tbody>

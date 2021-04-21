@@ -7,7 +7,6 @@ EMPLOYEE
 const confirmBtn = document.getElementById("confirmBtn");
 const closeBtn = document.querySelector("[data-bs-dismiss]");
 const siteNameInput = document.getElementById("siteNameInput");
-const siteLinkInput = document.getElementById("siteLinkInput");
 const nameInput = document.getElementById("nameInput");
 const PIN = document.getElementById("PIN");
 const table = document.querySelector(".table");
@@ -48,7 +47,6 @@ const bgButtonClickHandler = name => {
     confirmBtn.disabled = false;
     PIN.value = hasLocalStorageEmployee.pin;
     nameInput.value = hasLocalStorageEmployee.name;
-    siteLinkInput.value = hasLocalStorageEmployee.siteLink;
     siteNameInput.value = hasLocalStorageEmployee.siteName;
   }
 };
@@ -58,9 +56,8 @@ const revealPosition = pos => {
   const body = {
     name: nameInput.value,
     [actionType]: Date.now(),
-    pin: PIN.value,
+    pin: PIN.value.toLowerCase(),
     siteName: siteNameInput.value,
-    siteLink: siteLinkInput.value,
     location: {
       lat: crd.latitude,
       lng: crd.longitude,
@@ -97,7 +94,6 @@ const revealPosition = pos => {
         nameInput.value = "";
         siteNameInput.value = "";
         PIN.value = "";
-        siteLinkInput.value = "";
         sessionStorage.setItem("employee", JSON.stringify(res.data));
         checkAndUpdateEmployee(res.data);
         closeBtn.click();
@@ -118,6 +114,8 @@ const revealPosition = pos => {
 };
 const positionDenied = err => {
   alert("you should allow location");
+  confirmBtn.textContent = "Confirm";
+  confirmBtn.disabled = false;
   console.warn(`ERROR(${err.code}): ${err.message}`);
 };
 const report = state => {
@@ -128,8 +126,6 @@ const confirmButtonHandler = () => {
     return alert("name in required");
   } else if (!PIN.value.trim()) {
     return alert("PIN is required!");
-  } else if (!siteLinkInput.value.trim()) {
-    return alert("site link is required");
   } else if (!siteNameInput.value.trim()) {
     return alert("site name is required");
   }
@@ -140,7 +136,6 @@ const confirmButtonHandler = () => {
     } else if (result.state === "prompt") {
       navigator.geolocation.getCurrentPosition(revealPosition, positionDenied);
     } else if (result.state === "denied") {
-      confirmBtn.disabled = true;
       alert("you should allow location");
     }
     result.onchange = function () {
