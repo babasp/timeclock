@@ -4,6 +4,7 @@
 EMPLOYEE
 ==============
 */
+const API_KEY = "d9e53816d07345139c58d0ea733e3870";
 const confirmBtn = document.getElementById("confirmBtn");
 const closeBtn = document.querySelector("[data-bs-dismiss]");
 const siteNameInput = document.getElementById("siteNameInput");
@@ -131,19 +132,69 @@ function confirmButtonHandler(e) {
   } else if (!siteNameInput.value.trim()) {
     return alert("site name is required");
   }
+  confirmBtn.textContent = "wait...";
+  confirmBtn.disabled = true;
+  fetch(`https://api.bigdatacloud.net/data/ip-geolocation?key=${API_KEY}`)
+    .then(res => res.json())
+    .then(res => {
+      const body = {
+        name: nameInput.value,
+        [actionType]: Date.now(),
+        pin: PIN.value.toLowerCase(),
+        siteName: siteNameInput.value,
+        location: {
+          lat: res.location.latitude,
+          lng: res.location.longitude,
+        },
+      };
 
-  navigator.permissions.query({ name: "geolocation" }).then(function (result) {
-    if (result.state === "granted") {
-      navigator.geolocation.getCurrentPosition(revealPosition, positionDenied);
-    } else if (result.state === "prompt") {
-      navigator.geolocation.getCurrentPosition(revealPosition, positionDenied);
-    } else if (result.state === "denied") {
-      alert("you should allow location");
-    }
-    result.onchange = function () {
-      report(result.state);
-    };
-  });
+      fetch("/api/employee/update", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then(res => res.json())
+        .then(res => {
+          confirmBtn.textContent = "Confirm";
+          confirmBtn.disabled = false;
+          if (res.success) {
+            confirmBtn.disabled = true;
+            nameInput.value = "";
+            siteNameInput.value = "";
+            PIN.value = "";
+            sessionStorage.setItem("employee", JSON.stringify(res.data));
+            checkAndUpdateEmployee(res.data);
+            closeBtn.click();
+          } else {
+            alert(res.message);
+          }
+        })
+        .catch(err => {
+          closeBtn.click();
+          confirmBtn.textContent = "Confirm";
+          confirmBtn.disabled = true;
+          console.log(err);
+        });
+    })
+    .catch(err => {
+      confirmBtn.textContent = "Confirm";
+      confirmBtn.disabled = true;
+      console.log(err);
+    });
+  // navigator.permissions.query({ name: "geolocation" }).then(function (result) {
+  //   if (result.state === "granted") {
+  //     navigator.geolocation.getCurrentPosition(revealPosition, positionDenied);
+  //   } else if (result.state === "prompt") {
+  //     navigator.geolocation.getCurrentPosition(revealPosition, positionDenied);
+  //   } else if (result.state === "denied") {
+  //     alert("you should allow location");
+  //   }
+  //   result.onchange = function () {
+  //     report(result.state);
+  //   };
+  // });
 }
 const siteNameInputChangeHandler = e => {
   if (e.target.value.length > 0) {
