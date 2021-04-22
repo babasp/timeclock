@@ -150,5 +150,5 @@ const siteNameInputChangeHandler = e => {
     confirmBtn.disabled = true;
   }
 };
-confirmBtn.addEventListener("click", confirmButtonHandler);
+$("#confirmBtn").on("click touchstart", confirmButtonHandler);
 siteNameInput.addEventListener("input", siteNameInputChangeHandler);
