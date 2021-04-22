@@ -9,10 +9,10 @@ ADMIN
 ==============
 */
 //DATE RANGE SELEC
-const dateSelected = (start, end, label) => {
+function dateSelected(start, end, label) {
   console.log(location.pathname);
   location.assign(`${location.pathname}?start=${start._d}&end=${end._d}`);
-};
+}
 
 $('input[name="daterange"]').daterangepicker(
   {
@@ -30,7 +30,7 @@ const profileForm = document.getElementById("profileForm");
 const updateBtn = document.getElementById("updateBtn");
 const siteOpt = document.getElementById("siteOptions");
 
-const profileUpdateHandler = e => {
+function profileUpdateHandler(e) {
   e.preventDefault();
   if (!email.value.trim()) {
     return alert("email is required");
@@ -75,15 +75,15 @@ const profileUpdateHandler = e => {
       updateBtn.value = "Update";
       console.log(err);
     });
-};
+}
 
 if (profileForm) {
   profileForm.addEventListener("submit", profileUpdateHandler);
 }
 
-const siteChangeHandler = e => {
+function siteChangeHandler(e) {
   location.assign(e.target.value);
-};
+}
 
 if (siteOpt) {
   siteOpt.addEventListener("change", siteChangeHandler);

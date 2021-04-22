@@ -18,7 +18,8 @@
           <div class="form-group mb-3">
             <label for="PIN">PIN</label>
             <input class="form-control" id="pin" type="text" name="pin" placeholder="PIN" />
-            <button type="button" class="btn btn-sm btn-secondary mt-2 pinGenerateBtn">generate pin</button>
+            <button style="cursor: pointer;" type="button" class="btn btn-sm btn-secondary mt-2 pinGenerateBtn">generate
+              pin</button>
           </div>
 
           <div class="d-grid gap-2 mt-3">
@@ -43,7 +44,7 @@
         return v.toString(16);
       });
     }
-    const formSubmitHandler = (e) => {
+    function formSubmitHandler(e) {
       e.preventDefault()
       const name = nameInput.value.trim();
       const pin = pinInput.value.trim();
@@ -85,7 +86,7 @@
 
         })
     }
-    pinGenerateBtn.addEventListener('click', () => pinInput.value = uuidv4())
+    pinGenerateBtn.addEventListener('click', function () { pinInput.value = uuidv4() })
     form.addEventListener('submit', formSubmitHandler)
   </script>
   <%- include("_adminFooter") %>

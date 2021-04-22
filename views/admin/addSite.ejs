@@ -28,7 +28,7 @@
     const form = document.querySelector("form")
     const siteNameInput = document.getElementById('siteName')
     const createBtn = document.getElementById('createBtn');
-    const formSubmitHandler = (e) => {
+    function formSubmitHandler(e) {
       e.preventDefault()
       if (!siteNameInput.value.trim()) {
         return alert("site name is required")
