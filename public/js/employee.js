@@ -121,7 +121,8 @@ const positionDenied = err => {
 const report = state => {
   console.log("Permission " + state);
 };
-const confirmButtonHandler = () => {
+const confirmButtonHandler = e => {
+  e.preventDefault();
   if (!nameInput.value.trim()) {
     return alert("name in required");
   } else if (!PIN.value.trim()) {
@@ -150,5 +151,5 @@ const siteNameInputChangeHandler = e => {
     confirmBtn.disabled = true;
   }
 };
-$("#confirmBtn").on("click touchstart", confirmButtonHandler);
+confirmBtn.addEventListener("click", confirmButtonHandler);
 siteNameInput.addEventListener("input", siteNameInputChangeHandler);
