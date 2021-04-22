@@ -40,6 +40,7 @@ if (hasLocalStorageEmployee) {
 
 let actionType;
 const bgButtonClickHandler = name => {
+  console.log("click");
   actionType = name;
   hasLocalStorageEmployee = sessionStorage.getItem("employee");
   if (hasLocalStorageEmployee) {
