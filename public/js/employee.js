@@ -152,5 +152,5 @@ const siteNameInputChangeHandler = e => {
   }
 };
 confirmBtn.addEventListener("click", confirmButtonHandler);
-confirmBtn.addEventListener("touchstart", confirmButtonHandler);
+// confirmBtn.addEventListener("touchstart", confirmButtonHandler);
 siteNameInput.addEventListener("input", siteNameInputChangeHandler);
