@@ -122,7 +122,7 @@ const report = state => {
   console.log("Permission " + state);
 };
 function confirmButtonHandler(e) {
-  e.preventDefault();
+  // e.preventDefault();
   if (!nameInput.value.trim()) {
     return alert("name in required");
   } else if (!PIN.value.trim()) {
@@ -151,6 +151,6 @@ const siteNameInputChangeHandler = e => {
     confirmBtn.disabled = true;
   }
 };
-confirmBtn.addEventListener("click", confirmButtonHandler);
+// confirmBtn.addEventListener("click", confirmButtonHandler);
 // confirmBtn.addEventListener("touchstart", confirmButtonHandler);
 siteNameInput.addEventListener("input", siteNameInputChangeHandler);
