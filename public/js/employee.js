@@ -121,7 +121,7 @@ const positionDenied = err => {
 const report = state => {
   console.log("Permission " + state);
 };
-const confirmButtonHandler = e => {
+function confirmButtonHandler(e) {
   e.preventDefault();
   if (!nameInput.value.trim()) {
     return alert("name in required");
@@ -143,7 +143,7 @@ const confirmButtonHandler = e => {
       report(result.state);
     };
   });
-};
+}
 const siteNameInputChangeHandler = e => {
   if (e.target.value.length > 0) {
     confirmBtn.disabled = false;
@@ -152,4 +152,5 @@ const siteNameInputChangeHandler = e => {
   }
 };
 confirmBtn.addEventListener("click", confirmButtonHandler);
+confirmBtn.addEventListener("touchstart", confirmButtonHandler);
 siteNameInput.addEventListener("input", siteNameInputChangeHandler);
