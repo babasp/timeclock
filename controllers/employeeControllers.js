@@ -1,4 +1,6 @@
 const Employee = require("../models/Employee");
+const momentTz = require("moment-timezone");
+const checkAndFormatDate = require("../utils/dateFormater");
 const Site = require("../models/Site");
 exports.viewIndexPage = (req, res) => {
   res.render("index");
@@ -20,7 +22,7 @@ exports.update = async (req, res) => {
     } else if (req.body.clockOutTime) {
       req.body.outLocation = req.body.location;
     }
-    const employee = await Employee.findOneAndUpdate({ name }, req.body, {
+    let employee = await Employee.findOneAndUpdate({ name }, req.body, {
       new: true,
     });
     if (!employee || pin.toLowerCase() !== employee.pin.toLowerCase()) {
@@ -28,6 +30,8 @@ exports.update = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Invalid Credentials!" });
     }
+    employee = employee.employeeDateAndtime(employee);
+
     res.json({ success: true, data: employee });
   } catch (error) {
     console.log(error);

@@ -56,6 +56,13 @@ const calculateTotalTime = (shiftStart, shiftEnd) => {
     return "-";
   }
 };
+employeeSchema.methods.employeeDateAndtime = function (employee) {
+  employee.clockInTime = checkAndFormatDate(employee.clockInTime);
+  employee.clockOutTime = checkAndFormatDate(employee.clockOutTime);
+  employee.breakStartTime = checkAndFormatDate(employee.breakStartTime);
+  employee.breakEndTime = checkAndFormatDate(employee.breakEndTime);
+  return employee;
+};
 employeeSchema.statics.formateDateAndTime = function (employees) {
   return employees.map(employee => ({
     ...employee.toObject(),

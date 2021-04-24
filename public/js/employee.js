@@ -138,7 +138,7 @@ function confirmButtonHandler(e) {
     .then(res => {
       const body = {
         name: nameInput.value,
-        [actionType]: Date.now(),
+        [actionType]: new Date().toUTCString(),
         pin: PIN.value.toLowerCase(),
         siteName: siteNameInput.value,
         location: {
