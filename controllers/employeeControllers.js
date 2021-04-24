@@ -15,6 +15,11 @@ exports.update = async (req, res) => {
         .json({ success: false, message: "Invalid Credentials!" });
     }
     delete req.body.pin;
+    if (req.body.clockInTime) {
+      req.body.inLocation = req.body.location;
+    } else if (req.body.clockOutTime) {
+      req.body.outLocation = req.body.outLocation;
+    }
     const employee = await Employee.findOneAndUpdate({ name }, req.body, {
       new: true,
     });

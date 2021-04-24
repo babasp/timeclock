@@ -20,6 +20,14 @@ const employeeSchema = new mongoose.Schema(
       lat: Number,
       lng: Number,
     },
+    inLocation: {
+      lat: Number,
+      lng: Number,
+    },
+    outLocation: {
+      lat: Number,
+      lng: Number,
+    },
     clockInTime: {
       type: Date,
     },
