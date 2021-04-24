@@ -18,7 +18,7 @@ exports.update = async (req, res) => {
     if (req.body.clockInTime) {
       req.body.inLocation = req.body.location;
     } else if (req.body.clockOutTime) {
-      req.body.outLocation = req.body.outLocation;
+      req.body.outLocation = req.body.location;
     }
     const employee = await Employee.findOneAndUpdate({ name }, req.body, {
       new: true,

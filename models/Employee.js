@@ -50,7 +50,6 @@ const calculateTotalTime = (shiftStart, shiftEnd) => {
     var mins = moment
       .utc(moment(shiftEnd, "HH:mm:ss").diff(moment(shiftStart, "HH:mm:ss")))
       .format("mm");
-    console.log(h);
     // console.log(duration);
     return `${h} hours and ${mins} minutes`;
   } else {
@@ -65,6 +64,8 @@ employeeSchema.statics.formateDateAndTime = function (employees) {
     breakStartTime: checkAndFormatDate(employee.breakStartTime),
     breakEndTime: checkAndFormatDate(employee.breakEndTime),
     location: Object.values(employee.location.toObject()).join(", "),
+    inLocation: Object.values(employee.inLocation.toObject()).join(", "),
+    outLocation: Object.values(employee.outLocation.toObject()).join(", "),
     totalTime: calculateTotalTime(employee.clockInTime, employee.clockOutTime),
   }));
 };
