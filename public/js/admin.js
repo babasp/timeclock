@@ -1,6 +1,7 @@
 "use strict";
 const validateEmail = email => {
-  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 };
 /*
@@ -29,6 +30,7 @@ const confirmPassword = document.getElementById("confirmPassword");
 const profileForm = document.getElementById("profileForm");
 const updateBtn = document.getElementById("updateBtn");
 const siteOpt = document.getElementById("siteOptions");
+const employeeOpt = document.getElementById("employeeOpt");
 
 function profileUpdateHandler(e) {
   e.preventDefault();
@@ -87,4 +89,10 @@ function siteChangeHandler(e) {
 
 if (siteOpt) {
   siteOpt.addEventListener("change", siteChangeHandler);
+}
+function employeeChangeHandler(e) {
+  location.assign(e.target.value);
+}
+if (employeeOpt) {
+  employeeOpt.addEventListener("change", employeeChangeHandler);
 }

@@ -7,6 +7,7 @@ router.route("/").get(adminControllers.viewAdminPage);
 router.get("/logout", adminControllers.logOut);
 router.get("/profile", adminControllers.viewProfilePage);
 router.get("/all-site", adminControllers.viewAllSitePage);
+router.get("/all-employee", adminControllers.viewAllEmployeePage);
 router.get("/add-site", adminControllers.viewAddSitePage);
 router.get("/add-employee", adminControllers.viewAddEmployeePage);
 //apis
@@ -17,4 +18,5 @@ router.route("/api/create-employee").post(adminControllers.createEmployee);
 router
   .route("/api/delete-employee/:employeeId")
   .delete(adminControllers.deleteEmployee);
+router.route("/api/delete-work/:workId").delete(adminControllers.deleteWork);
 module.exports = router;

@@ -1,8 +1,10 @@
 const { promisify } = require("util");
 const Admin = require("../models/Admin");
+const Work = require("../models/Work");
 const Employee = require("../models/Employee");
 const Site = require("../models/Site");
 const jwt = require("jsonwebtoken");
+const pagination = require("../utils/pagination");
 const signToken = id =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -127,25 +129,56 @@ exports.deleteEmployee = async (req, res) => {
     res.status(400).json({ success: false, message: error.message });
   }
 };
+exports.deleteWork = async (req, res) => {
+  try {
+    const work = await Work.findByIdAndDelete(req.params.workId);
+    res.json({ success: true, data: "Work deleted" });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 /// views
 exports.viewAdminPage = async (req, res) => {
-  const { site, start, end } = req.query;
+  const { site, start, end, page = 1, employee } = req.query;
 
   try {
-    let query = Employee.find();
+    const limit = 10;
+    const totalDocuments = await Work.countDocuments();
+    const totalPage = Math.ceil(totalDocuments / limit);
+    let pageArr = [];
+    if (totalDocuments > 10) {
+      pageArr = pagination(Number(page), totalPage);
+    }
+    const skip = (+page - 1) * limit;
+    let query = Work.find().sort({ clockInTime: -1 }).limit(limit).skip(skip);
     if (site) {
-      query = query.find({ siteName: site });
-    } else if (start && end) {
+      query = query.find({ site });
+    }
+    if (start && end) {
       query = query.find({
         clockInTime: { $gte: new Date(start) },
         clockOutTime: { $lte: new Date(end) },
       });
     }
+    if (employee) {
+      query = query.find({ employeeName: employee });
+    }
+    let employees = await Employee.find();
+    employees = employees.map(e => ({
+      ...e.toJSON(),
+      isSelect: e.name === employee,
+    }));
     let sites = await Site.find();
     sites = sites.map(s => ({ ...s.toJSON(), isSelect: s.siteName === site }));
-    let employees = await query;
-    employees = Employee.formateDateAndTime(employees);
-    return res.render("admin/admin", { employees, sites });
+    let works = await query;
+    works = Work.formateDateAndTime(works);
+    return res.render("admin/admin", {
+      works,
+      sites,
+      employees,
+      pageArr,
+      page: +page,
+    });
   } catch (error) {
     console.log(error);
     res.redirect("/admin");
@@ -159,6 +192,16 @@ exports.viewAllSitePage = async (req, res) => {
     const allSites = await Site.find();
 
     res.render("admin/allSite", { sites: allSites });
+  } catch (error) {
+    console.log(error);
+    res.redirect("/admin");
+  }
+};
+exports.viewAllEmployeePage = async (req, res) => {
+  try {
+    const allEmployee = await Employee.find();
+
+    res.render("admin/allEmployee", { employees: allEmployee });
   } catch (error) {
     console.log(error);
     res.redirect("/admin");

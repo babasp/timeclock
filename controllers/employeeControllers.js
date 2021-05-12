@@ -1,6 +1,6 @@
 const Employee = require("../models/Employee");
+const Work = require("../models/Work");
 const momentTz = require("moment-timezone");
-const checkAndFormatDate = require("../utils/dateFormater");
 const Site = require("../models/Site");
 exports.viewIndexPage = (req, res) => {
   res.render("index");
@@ -8,31 +8,38 @@ exports.viewIndexPage = (req, res) => {
 
 // api controllers
 exports.update = async (req, res) => {
-  const { siteName, pin, name } = req.body;
+  const { siteName, pin, name, id } = req.body;
   try {
     const hasSite = await Site.findOne({ siteName });
-    if (!hasSite) {
+    const hasEmployee = await Employee.findOne({ name, pin });
+    if (!hasSite || !hasEmployee) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid Credentials!" });
     }
-    delete req.body.pin;
+    req.body.employeeName = hasEmployee.name;
+    req.body.employeePin = hasEmployee.pin;
+    req.body.site = hasSite.siteName;
     if (req.body.clockInTime) {
       req.body.inLocation = req.body.location;
     } else if (req.body.clockOutTime) {
       req.body.outLocation = req.body.location;
     }
-    let employee = await Employee.findOneAndUpdate({ name }, req.body, {
-      new: true,
-    });
-    if (!employee || pin.toLowerCase() !== employee.pin.toLowerCase()) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid Credentials!" });
+    let work;
+    if (req.body.clockInTime) {
+      work = await Work.create(req.body);
+    } else if (id) {
+      work = await Work.findOneAndUpdate({ _id: id }, req.body, {
+        new: true,
+      });
     }
-    employee = employee.employeeDateAndtime(employee);
 
-    res.json({ success: true, data: employee });
+    work = work.employeeDateAndtime(work);
+
+    res.json({
+      success: true,
+      data: work,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).json({ success: false, message: error.message });

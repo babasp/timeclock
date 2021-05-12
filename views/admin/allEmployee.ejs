@@ -1,0 +1,97 @@
+<%- include("_adminHeader") %>
+
+  <div class="container">
+    <div class="row d-flex justify-content-center my-3">
+      <div class="col-md-6">
+        <h3 class="display-6">Employees</h3>
+      </div>
+
+    </div>
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+        <a href="/admin/add-employee" class="btn btn-primary btn-lg">Add Employee</a>
+      </div>
+
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-6">
+
+
+        <% if(employees.length>0){ %>
+          <table class="table">
+            <thead>
+              <tr>
+
+                <th scope="col"> Name</th>
+                <th scope="col">Pin</th>
+                <th scope="col"></th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let i=0;i<employees.length;i++){ %>
+                <tr>
+                  <td>
+                    <%= employees[i].name %>
+                  </td>
+                  <td>
+                    <%= employees[i].pin %>
+                  </td>
+                  <td class="text-end"><button data-delete-id="<%= employees[i]._id %> "
+                      class="btn btn-danger btn-sm deleteSiteBtn">Delete</button></td>
+                </tr>
+            </tbody>
+
+            <% } %>
+          </table>
+          <% }else{ %>
+            <h3>no site found</h3>
+            <% } %>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    const deleteBtns = document.querySelectorAll('.deleteSiteBtn')
+    const deleteHandler = e => {
+      e.preventDefault()
+      const btn = e.target
+      const id = btn.dataset.deleteId
+      if (confirm('you want to delete this employee?')) {
+        btn.textContent = "Deleting..."
+        btn.disabled = true;
+        fetch(`/admin/api/delete-employee/${id}`, {
+          method: "DELETE",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+
+        })
+          .then(res => res.json())
+          .then(res => {
+            btn.textContent = 'Delete'
+            btn.disabled = false;
+            if (res.success) {
+              const tr = btn.parentNode.parentNode;
+              tr.parentNode.removeChild(tr)
+            } else {
+              console.log(res)
+
+            }
+          })
+          .catch(err => {
+            console.log(err)
+            btn.textContent = 'Delete'
+            btn.disabled = false;
+          })
+      }
+    }
+    deleteBtns.forEach(btn => {
+      btn.addEventListener('click', deleteHandler)
+    })
+
+
+  </script>
+  <%- include("_adminFooter") %>
+    </div>

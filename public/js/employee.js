@@ -21,12 +21,12 @@ const formateDateAndTime = time => {
 const checkAndUpdateEmployee = data => {
   table.classList.remove("d-none");
   siteHeading.classList.remove("d-none");
-  siteHeading.querySelector("div h3").textContent = "Site: " + data.siteName;
+  siteHeading.querySelector("div h3").textContent = "Site: " + data.site;
   const tbody = table.querySelector("tbody");
 
   tbody.innerHTML = `<tr>
-        <td>${data.name}</td>
-        <td>${data.pin}</td>
+        <td>${data.employeeName}</td>
+        <td>${data.employeePin}</td>
         <td>${formateDateAndTime(data.clockInTime)}</td>
         <td>${formateDateAndTime(data.clockOutTime)}</td>
         <td>${formateDateAndTime(data.breakStartTime)}</td>
@@ -46,9 +46,9 @@ const bgButtonClickHandler = name => {
   if (hasLocalStorageEmployee) {
     hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
     confirmBtn.disabled = false;
-    PIN.value = hasLocalStorageEmployee.pin;
-    nameInput.value = hasLocalStorageEmployee.name;
-    siteNameInput.value = hasLocalStorageEmployee.siteName;
+    PIN.value = hasLocalStorageEmployee.employeePin;
+    nameInput.value = hasLocalStorageEmployee.employeeName;
+    siteNameInput.value = hasLocalStorageEmployee.site;
   }
 };
 const revealPosition = pos => {
@@ -97,6 +97,7 @@ const revealPosition = pos => {
         PIN.value = "";
         sessionStorage.setItem("employee", JSON.stringify(res.data));
         checkAndUpdateEmployee(res.data);
+        console.log(res.data);
         closeBtn.click();
       } else {
         alert(res.message);
@@ -124,6 +125,7 @@ const report = state => {
 };
 function confirmButtonHandler(e) {
   // e.preventDefault();
+  hasLocalStorageEmployee = sessionStorage.getItem("employee");
   if (!nameInput.value.trim()) {
     return alert("name in required");
   } else if (!PIN.value.trim()) {
@@ -133,17 +135,21 @@ function confirmButtonHandler(e) {
   }
   confirmBtn.textContent = "wait...";
   confirmBtn.disabled = true;
-  fetch(`https://api.bigdatacloud.net/data/ip-geolocation?key=${API_KEY}`)
+  fetch(`http://www.geoplugin.net/json.gp`)
     .then(res => res.json())
     .then(res => {
+      // console.log(res);
       const body = {
         name: nameInput.value,
         [actionType]: new Date().toUTCString(),
+        id: hasLocalStorageEmployee
+          ? JSON.parse(hasLocalStorageEmployee)._id
+          : null,
         pin: PIN.value.toLowerCase(),
         siteName: siteNameInput.value,
         location: {
-          lat: res.location.latitude,
-          lng: res.location.longitude,
+          lat: res.geoplugin_latitude,
+          lng: res.geoplugin_longitude,
         },
       };
 
