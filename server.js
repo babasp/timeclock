@@ -24,6 +24,9 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use("/", employeeRoutes);
+app.use("/geoplugin_activation.html", (req, res) => {
+  res.send("/geoplugin_activation.html");
+});
 app.use("/admin", adminRoutes);
 
 app.all("*", (req, res) => {
