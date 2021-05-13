@@ -4,7 +4,8 @@
 EMPLOYEE
 ==============
 */
-const API_KEY = "d9e53816d07345139c58d0ea733e3870";
+const API_KEY = "66df9346682848d7b78ae830a4191514"; //my
+// const API_KEY = "d9e53816d07345139c58d0ea733e3870"; // out
 const confirmBtn = document.getElementById("confirmBtn");
 const closeBtn = document.querySelector("[data-bs-dismiss]");
 const siteNameInput = document.getElementById("siteNameInput");
@@ -135,10 +136,11 @@ function confirmButtonHandler(e) {
   }
   confirmBtn.textContent = "wait...";
   confirmBtn.disabled = true;
-  fetch(`http://www.geoplugin.net/json.gp`)
+  fetch(
+    `https://api.bigdatacloud.net/data/ip-geolocation-with-confidence?key=${API_KEY}`
+  )
     .then(res => res.json())
     .then(res => {
-      // console.log(res);
       const body = {
         name: nameInput.value,
         [actionType]: new Date().toUTCString(),
@@ -148,8 +150,8 @@ function confirmButtonHandler(e) {
         pin: PIN.value.toLowerCase(),
         siteName: siteNameInput.value,
         location: {
-          lat: res.geoplugin_latitude,
-          lng: res.geoplugin_longitude,
+          lat: res.location.latitude,
+          lng: res.location.longitude,
         },
       };
 
