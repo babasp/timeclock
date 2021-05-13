@@ -156,8 +156,8 @@ exports.viewAdminPage = async (req, res) => {
     }
     if (start && end) {
       query = query.find({
-        clockInTime: { $gte: new Date(start) },
-        clockOutTime: { $lte: new Date(end) },
+        createdAt: { $gte: new Date(start) },
+        createdAt: { $lte: new Date(end) },
       });
     }
     if (employee) {
@@ -178,6 +178,8 @@ exports.viewAdminPage = async (req, res) => {
       employees,
       pageArr,
       page: +page,
+      start,
+      end,
     });
   } catch (error) {
     console.log(error);

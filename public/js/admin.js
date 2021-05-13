@@ -14,10 +14,16 @@ function dateSelected(start, end, label) {
   console.log(location.pathname);
   location.assign(`${location.pathname}?start=${start._d}&end=${end._d}`);
 }
-
+const dateRangeInput = document.querySelector('input[name="daterange"]');
 $('input[name="daterange"]').daterangepicker(
   {
     opens: "center",
+    startDate: dateRangeInput.dataset.start
+      ? new Date(dateRangeInput.dataset.start)
+      : new Date(),
+    endDate: dateRangeInput.dataset.end
+      ? new Date(dateRangeInput.dataset.end)
+      : new Date(),
   },
   dateSelected
 );
