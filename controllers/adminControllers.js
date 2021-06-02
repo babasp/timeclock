@@ -171,6 +171,7 @@ exports.viewAdminPage = async (req, res) => {
     let sites = await Site.find();
     sites = sites.map(s => ({ ...s.toJSON(), isSelect: s.siteName === site }));
     let works = await query;
+
     works = Work.formateDateAndTime(works);
     return res.render("admin/admin", {
       works,

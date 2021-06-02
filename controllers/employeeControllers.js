@@ -25,11 +25,19 @@ exports.update = async (req, res) => {
     } else if (req.body.clockOutTime) {
       req.body.outLocation = req.body.location;
     }
+
     let work;
     if (req.body.clockInTime) {
       work = await Work.create(req.body);
     } else if (id) {
       work = await Work.findOneAndUpdate({ _id: id }, req.body, {
+        new: true,
+      });
+    } else {
+      const currentWorker = await Work.findOne({ employeeName: name }).sort({
+        createdAt: -1,
+      });
+      work = await Work.findByIdAndUpdate(currentWorker._id, req.body, {
         new: true,
       });
     }

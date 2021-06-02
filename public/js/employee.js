@@ -14,7 +14,7 @@ const PIN = document.getElementById("PIN");
 const table = document.querySelector(".table");
 const siteHeading = document.querySelector(".site-heading");
 
-let hasLocalStorageEmployee = sessionStorage.getItem("employee");
+let hasLocalStorageEmployee = localStorage.getItem("employee");
 
 const formateDateAndTime = time => {
   return time ? moment(time).format("MM-DD-YYYY HH:mm A") : "-";
@@ -43,7 +43,7 @@ if (hasLocalStorageEmployee) {
 let actionType;
 const bgButtonClickHandler = name => {
   actionType = name;
-  hasLocalStorageEmployee = sessionStorage.getItem("employee");
+  hasLocalStorageEmployee = localStorage.getItem("employee");
   if (hasLocalStorageEmployee) {
     hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
     confirmBtn.disabled = false;
@@ -68,7 +68,7 @@ const revealPosition = pos => {
   confirmBtn.textContent = "wait...";
   confirmBtn.disabled = true;
 
-  // hasLocalStorageEmployee = sessionStorage.getItem("employee");
+  // hasLocalStorageEmployee = localStorage.getItem("employee");
   // if (actionType !== "clockInTime" || hasLocalStorageEmployee) {
   //   if (hasLocalStorageEmployee) {
   //     hasLocalStorageEmployee = JSON.parse(hasLocalStorageEmployee);
@@ -96,7 +96,7 @@ const revealPosition = pos => {
         nameInput.value = "";
         siteNameInput.value = "";
         PIN.value = "";
-        sessionStorage.setItem("employee", JSON.stringify(res.data));
+        localStorage.setItem("employee", JSON.stringify(res.data));
         checkAndUpdateEmployee(res.data);
         console.log(res.data);
         closeBtn.click();
@@ -126,7 +126,7 @@ const report = state => {
 };
 function confirmButtonHandler(e) {
   // e.preventDefault();
-  hasLocalStorageEmployee = sessionStorage.getItem("employee");
+  hasLocalStorageEmployee = localStorage.getItem("employee");
   if (!nameInput.value.trim()) {
     return alert("name in required");
   } else if (!PIN.value.trim()) {
@@ -171,7 +171,7 @@ function confirmButtonHandler(e) {
             nameInput.value = "";
             siteNameInput.value = "";
             PIN.value = "";
-            sessionStorage.setItem("employee", JSON.stringify(res.data));
+            localStorage.setItem("employee", JSON.stringify(res.data));
             checkAndUpdateEmployee(res.data);
             closeBtn.click();
           } else {
